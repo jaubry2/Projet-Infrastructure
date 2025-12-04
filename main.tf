@@ -4,6 +4,7 @@ locals {
   sshUser        = "ansible"
   privateKeyPath = "~/.ssh/ansbile_ed25519"
   region         = "europe-west1"
+  zone           = "europe-west1-b"
 }
 
 ## We choose GCP as provider
@@ -11,11 +12,42 @@ provider "google" {
   project = local.projectId
   region  = local.region
 }
-
+## VPC network
 resource "google_compute_network" "custom_vpc_network" {
-  name                    = "custom-vpc-network"
-  auto_create_subnetworks = false 
-  description             = "VPC network for custom infrastructure"
-  delete_default_routes_on_create = true 
-  mtu                     = 1460
+  name                            = "custom-vpc-network"
+  auto_create_subnetworks         = false
+  description                     = "Réserau VPC pour l'infrastructure."
+  delete_default_routes_on_create = true
+  mtu                             = 1460
+}
+
+## Subnet VPC
+resource "google_compute_subnetwork" "custom_vpc_subnet" {
+  name          = "custom-vpc-subnet"
+  network       = google_compute_network.custom_vpc_network.id
+  ip_cidr_range = "10.10.0.0/24" # Plage CIDR à définir
+  region        = local.region
+  description   = "Sous-réseau principal pour l'infrastructure."
+}
+## Master Node
+resource "google_compute_instance" "master_node" {
+  name         = "master-node"
+  machine_type = "e2-micro"
+  zone         = local.zone
+
+  boot_disk {
+    initialize_params {
+      image = local.image
+    }
+  }
+  network_interface {
+    network = google_compute_network.custom_vpc_network.name
+    subnetwork = google_compute_subnetwork.custom_vpc_subnet.name
+    ## Permet d'obtenir une adresse IP publique éphémère 
+    access_config {
+    }
+  }
+  metadata = {
+    ssh-keys = "${local.sshUser}:${file(local.privateKeyPath)}"
+  }
 }
