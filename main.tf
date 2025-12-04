@@ -31,6 +31,24 @@ resource "google_compute_subnetwork" "custom_vpc_subnet" {
   description   = "Sous-réseau principal pour l'infrastructure."
 }
 
+## Firewall
+resource "google_compute_firewall" "allow_ssh" {
+  name    = "allow-ssh-for-ansible"
+  # Associer cette règle au réseau VPC
+  network = google_compute_network.custom_vpc_network.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"] # Port standard pour SSH
+  }
+
+  source_ranges = ["0.0.0.0/0"] # Autoriser depuis n'importe où (à restreindre pour la production)
+
+  # Ciblez le Master Node via son tag "http-server" ou ajoutez un tag "ansible"
+  target_tags = ["http-server"] 
+  description = "Autorise le trafic SSH entrant pour la connexion Ansible."
+}
+
 ## Master Node
 resource "google_compute_instance" "master_node" {
   name         = "master-node"
