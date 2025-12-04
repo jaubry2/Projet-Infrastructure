@@ -12,6 +12,7 @@ provider "google" {
   project = local.projectId
   region  = local.region
 }
+
 ## VPC network
 resource "google_compute_network" "custom_vpc_network" {
   name                            = "custom-vpc-network"
@@ -29,9 +30,55 @@ resource "google_compute_subnetwork" "custom_vpc_subnet" {
   region        = local.region
   description   = "Sous-réseau principal pour l'infrastructure."
 }
+
 ## Master Node
 resource "google_compute_instance" "master_node" {
   name         = "master-node"
+  machine_type = "e2-micro"
+  zone         = local.zone
+
+  boot_disk {
+    initialize_params {
+      image = local.image
+    }
+  }
+  network_interface {
+    network = google_compute_network.custom_vpc_network.name
+    subnetwork = google_compute_subnetwork.custom_vpc_subnet.name
+    ## Permet d'obtenir une adresse IP publique éphémère 
+    access_config {
+    }
+  }
+  metadata = {
+    ssh-keys = "${local.sshUser}:${file(local.privateKeyPath)}"
+  }
+}
+
+## Worker Node
+resource "google_compute_instance" "worker_node" {
+  name         = "worker-node"
+  machine_type = "e2-micro"
+  zone         = local.zone
+
+  boot_disk {
+    initialize_params {
+      image = local.image
+    }
+  }
+  network_interface {
+    network = google_compute_network.custom_vpc_network.name
+    subnetwork = google_compute_subnetwork.custom_vpc_subnet.name
+    ## Permet d'obtenir une adresse IP publique éphémère 
+    access_config {
+    }
+  }
+  metadata = {
+    ssh-keys = "${local.sshUser}:${file(local.privateKeyPath)}"
+  }
+}
+
+resource "google_compute_instance" "edge_node" {
+  name         = "edge-node"
   machine_type = "e2-micro"
   zone         = local.zone
 
