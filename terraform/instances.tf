@@ -1,5 +1,5 @@
 resource "google_compute_instance" "nodes" {
-  for_each     = {
+  for_each = {
     "master" = "e2-micro",
     "worker" = "e2-micro",
     "edge"   = "e2-micro"
@@ -7,7 +7,8 @@ resource "google_compute_instance" "nodes" {
   name         = "${each.key}-node"
   machine_type = each.value
   zone         = var.zone
-  tags         = ["ansible-target"]
+  tags         = ["http-server", "ansible-target", "ssh-access"]
+
 
   boot_disk {
     initialize_params { image = "ubuntu-2204-jammy-v20251120" }
