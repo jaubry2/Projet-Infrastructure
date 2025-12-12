@@ -2,7 +2,7 @@ locals {
   projectId      = "projet-infrastructure"
   image          = "ubuntu-2204-jammy-v20251120"
   sshUser        = "terraform-user"
-  ssh_public_key_path = "~/.ssh/gcp_vm_key.pub"
+  ssh_public_key_path = "~/.ssh/gcp_vm_key_nopass.pub"
   region         = "europe-west1"
   zone           = "europe-west1-b"
 }
