@@ -1,0 +1,24 @@
+---
+- name: Créer le répertoire d'installation Spark
+  file:
+    path: "{{ install_base_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Télécharger et extraire Spark
+  unarchive:
+    src: "{{ spark_url }}"
+    dest: "{{ install_base_dir }}"
+    remote_src: yes
+    creates: "{{ spark_home }}"
+
+- name: Configurer SPARK_HOME et PATH dans le .bashrc
+  blockinfile:
+    path: "/home/{{ target_user }}/.bashrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: SPARK"
+    block: |
+      export SPARK_HOME={{ spark_home }}/spark-2.4.3-bin-hadoop2.7
+      export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
+    create: yes
+    mode: '0644'
+    owner: "{{ target_user }}"
