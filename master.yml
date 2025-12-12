@@ -1,0 +1,8 @@
+---
+- name: Installation de la Big Data Stack
+  hosts: master
+  become: yes
+  roles:
+    - java
+    - hadoop
+    - spark
