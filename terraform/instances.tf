@@ -15,8 +15,8 @@ resource "google_compute_instance" "nodes" {
   }
 
   network_interface {
-    network    = google_compute_network.custom_vpc.name
-    subnetwork = google_compute_subnetwork.custom_subnet.name
+    network    = google_compute_network.custom_vpc_network.name
+    subnetwork = google_compute_subnetwork.custom_vpc_subnet.name
     access_config {} # IP Publique
   }
 
