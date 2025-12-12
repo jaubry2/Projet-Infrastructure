@@ -1,0 +1,24 @@
+---
+- name: Créer le répertoire d'installation Java
+  file:
+    path: "{{ install_base_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Télécharger et extraire le JDK
+  unarchive:
+    src: "{{ java_url }}"
+    dest: "{{ install_base_dir }}"
+    remote_src: yes
+    creates: "{{ java_home }}"
+
+- name: Configurer JAVA_HOME et PATH dans le .bashrc
+  blockinfile:
+    path: "/home/{{ target_user }}/.bashrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: JAVA 8"
+    block: |
+      export JAVA_HOME={{ java_home }}
+      export PATH=$JAVA_HOME/bin:$PATH
+    create: yes
+    mode: '0644'
+    owner: "{{ target_user }}"
