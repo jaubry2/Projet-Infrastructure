@@ -1,0 +1,24 @@
+---
+- name: Créer le répertoire d'installation Hadoop
+  file:
+    path: "{{ install_base_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Télécharger et extraire Hadoop
+  unarchive:
+    src: "{{ hadoop_url }}"
+    dest: "{{ install_base_dir }}"
+    remote_src: yes
+    creates: "{{ hadoop_home }}"
+
+- name: Configurer HADOOP_HOME et PATH dans le .bashrc
+  blockinfile:
+    path: "/home/{{ target_user }}/.bashrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: HADOOP"
+    block: |
+      export HADOOP_HOME={{ hadoop_home }}/hadoop-2.7.1
+      export PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
+    create: yes
+    mode: "0644"
+    owner: "{{ target_user }}"
