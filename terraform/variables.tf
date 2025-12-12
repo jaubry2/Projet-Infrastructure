@@ -22,5 +22,5 @@ variable "ssh_user" {
 variable "ssh_pub_key" {
   description = "Lien vers la clé publique SSH"
   type        = string
-  default     = "~/.ssh/gcp_vm_key.pub"
+  default     = "/Users/jules/.ssh/gcp_vm_key_nopass.pub"
 }
