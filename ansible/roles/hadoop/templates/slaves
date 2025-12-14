@@ -1,2 +1,3 @@
-slave1
-slave2
+{% for host in groups['workers'] %}
+{{ host }}
+{% endfor %}

@@ -1,1 +1,1 @@
-export SPARK_MASTER_HOST=master
+export SPARK_MASTER_HOST={{ namenode_ip }}
