@@ -11,3 +11,6 @@
 
 # Répertoire local de Terraform
 .terraform/
+
+# Inventaire des ip machine
+inventory.ini
