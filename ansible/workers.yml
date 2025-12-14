@@ -1,0 +1,9 @@
+---
+- name: Installation de la Big Data Stack
+  hosts: workers
+  become: yes
+  roles:
+    - java
+    - hadoop
+    - spark
+
