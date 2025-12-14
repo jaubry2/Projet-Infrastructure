@@ -1,6 +1,6 @@
 ---
 hadoop_url: "https://hagimont.freeboxos.fr/hagimont/software/hadoop-2.7.1.tar.gz"
 install_base_dir: "/opt/hadoop"
-hadoop_folder_name: "hadoop2.7"
+hadoop_folder_name: "hadoop-2.7.1"
 hadoop_home: "{{ install_base_dir }}/{{ hadoop_folder_name }}"
 target_user: "terraform-user"
