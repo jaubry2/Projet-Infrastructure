@@ -28,7 +28,7 @@ resource "google_compute_instance" "nodes" {
       }
     }
   }
-
+  
   metadata = {
     ssh-keys = "${var.ssh_user}:${file(var.ssh_pub_key)}"
   }
