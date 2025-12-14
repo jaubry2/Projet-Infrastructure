@@ -17,7 +17,7 @@
     path: "/home/{{ target_user }}/.bashrc"
     marker: "# {mark} ANSIBLE MANAGED BLOCK: SPARK"
     block: |
-      export SPARK_HOME={{ spark_home }}/spark-2.4.3-bin-hadoop2.7
+      export SPARK_HOME={{ spark_home }}
       export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
     create: yes
     mode: '0644'
