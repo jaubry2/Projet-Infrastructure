@@ -26,7 +26,14 @@
 - name: Déployer slaves sur les NameNodes
   template:
     src: slaves
-    dest: "{{ hadoop_home }}/conf/slaves.template"
+    dest: "{{ hadoop_home }}/conf/slaves"
     owner: "{{ target_user }}"
   when: inventory_hostname in groups['workers']
+
+- name: Déployer spark-env.sh sur le DataNode
+  template:
+    src: spark-env.sh
+    dest: "{{ hadoop_home }}/conf/spark-env.sh"
+    owner: "{{ target_user }}"
+  when: inventory_hostname in groups['master']
 
