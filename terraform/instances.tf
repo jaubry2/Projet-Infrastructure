@@ -1,8 +1,9 @@
 resource "google_compute_instance" "nodes" {
   for_each = {
-    "master" = "e2-micro",
-    "worker" = "e2-micro",
-    "edge"   = "e2-micro"
+    "master"   = "e2-micro",
+    "worker-1" = "e2-micro",
+    "worker-2" = "e2-micro",
+    "edge"     = "e2-micro"
   }
   name         = "${each.key}-node"
   machine_type = each.value
@@ -17,7 +18,15 @@ resource "google_compute_instance" "nodes" {
   network_interface {
     network    = google_compute_network.custom_vpc_network.name
     subnetwork = google_compute_subnetwork.custom_vpc_subnet.name
-    access_config {} # IP Publique
+    dynamic "access_config" {
+      # La condition pour attribuer une IP publique (le bloc 'access_config')
+      # est vraie si 'each.key' est 'master', 'edge', ou 'worker-1'.
+      for_each = (each.key == "master" || each.key == "edge" || each.key == "worker-1") ? [1] : []
+
+      content {
+        # Si vous voulez l'IP temporaire par défaut, le bloc 'content' reste vide.
+      }
+    }
   }
 
   metadata = {
