@@ -17,8 +17,24 @@
     path: "/home/{{ target_user }}/.bashrc"
     marker: "# {mark} ANSIBLE MANAGED BLOCK: HADOOP"
     block: |
-      export HADOOP_HOME={{ hadoop_home }}/hadoop-2.7.1
+      export HADOOP_HOME={{ hadoop_home }}
       export PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
     create: yes
     mode: "0644"
     owner: "{{ target_user }}"
+
+
+
+- name: Déployer hadoop-env.sh pour le NameNode
+  template:
+    src: hadoop-env.sh
+    dest: "{{ hadoop_home }}/etc/hadoop/hadoop-env.sh"
+    owner: "{{ target_user }}"
+  when: inventory_hostname in groups['master']
+
+- name: Déployer core-site_xml pour le NameNode
+  template:
+    src: core-site.xml
+    dest: "{{ hadoop_home }}/etc/hadoop/core-site.xml"
+    owner: "{{ target_user }}"
+  when: inventory_hostname in groups['master']
