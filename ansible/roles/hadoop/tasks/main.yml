@@ -23,18 +23,23 @@
     mode: "0644"
     owner: "{{ target_user }}"
 
-
-
-- name: Déployer hadoop-env.sh pour le NameNode
+- name: Déployer hadoop-env.sh sur le NameNode
   template:
     src: hadoop-env.sh
     dest: "{{ hadoop_home }}/etc/hadoop/hadoop-env.sh"
     owner: "{{ target_user }}"
   when: inventory_hostname in groups['master']
 
-- name: Déployer core-site_xml pour le NameNode
+- name: Déployer hdfs-site.xml sur les DataNode
   template:
-    src: core-site.xml
-    dest: "{{ hadoop_home }}/etc/hadoop/core-site.xml"
+    src: hdfs-site.xml
+    dest: "{{ hadoop_home }}/etc/hadoop/hdfs-site.xml"
     owner: "{{ target_user }}"
-  when: inventory_hostname in groups['master']
+  when: inventory_hostname in groups['workers']
+
+- name: Déployer slaves pour le NameNode
+  template:
+    src: slaves
+    dest: "{{ hadoop_home }}/etc/hadoop/slaves"
+    owner: "{{ target_user }}"
+  when: inventory_hostname in groups['workers']
