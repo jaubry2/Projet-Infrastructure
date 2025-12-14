@@ -30,6 +30,13 @@
     owner: "{{ target_user }}"
   when: inventory_hostname in groups['master']
 
+- name: Déployer core-site.xml sur le NameNode
+  template:
+    src: core-site.xml
+    dest: "{{ hadoop_home }}/etc/hadoop/core-site.xml"
+    owner: "{{ target_user }}"
+  when: inventory_hostname in groups['master']
+
 - name: Déployer hdfs-site.xml sur les DataNode
   template:
     src: hdfs-site.xml
