@@ -22,3 +22,11 @@
     create: yes
     mode: '0644'
     owner: "{{ target_user }}"
+
+- name: Déployer slaves sur les NameNodes
+  template:
+    src: slaves
+    dest: "{{ hadoop_home }}/conf/slaves.template"
+    owner: "{{ target_user }}"
+  when: inventory_hostname in groups['workers']
+
