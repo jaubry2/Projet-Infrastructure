@@ -1,0 +1,20 @@
+---
+- name: Créer le répertoire pour le projet
+  file:
+    path: "{{ install_base_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Télécharger et extraire le projet à éxécuter
+  unarchive:
+    src: "{{ wordcount_url }}"
+    dest: "{{ install_base_dir }}"
+    remote_src: yes
+    creates: "{{ wordcount_home }}"
+    owner: "{{ target_user }}"
+
+- name: Modifier le fichier start.sh
+  template:
+    src: start.sh
+    dest: "{{wordcount_home}}/start.sh"
+    owner: "{{ target_user }}"
