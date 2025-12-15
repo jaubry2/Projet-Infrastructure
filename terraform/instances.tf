@@ -1,9 +1,9 @@
 resource "google_compute_instance" "nodes" {
   for_each = {
-    "master"   = "e2-micro",
-    "worker-1" = "e2-micro",
-    "worker-2" = "e2-micro",
-    "edge"     = "e2-micro"
+    "master"   = "e2-standard-2",
+    "worker-1" = "e2-standard-2",
+    "worker-2" = "e2-standard-2",
+    "edge"     = "e2-standard-2"
   }
   name         = "${each.key}-node"
   machine_type = each.value
@@ -12,7 +12,10 @@ resource "google_compute_instance" "nodes" {
 
 
   boot_disk {
-    initialize_params { image = "ubuntu-2204-jammy-v20251120" }
+    initialize_params {
+      image = "ubuntu-2204-jammy-v20251120" # Ou l'image de votre choix
+      size  = 20 # Définit la taille du disque à 20 GB
+    }
   }
 
   network_interface {
@@ -28,7 +31,7 @@ resource "google_compute_instance" "nodes" {
       }
     }
   }
-  
+
   metadata = {
     ssh-keys = "${var.ssh_user}:${file(var.ssh_pub_key)}"
   }
