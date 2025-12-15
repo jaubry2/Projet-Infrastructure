@@ -1,3 +1,1 @@
-{% for host in groups['workers'] %}
-{{ host }}
-{% endfor %}
+{{ datanodes_ips | replace(",", "\n") }}
