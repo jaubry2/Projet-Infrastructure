@@ -44,7 +44,7 @@
     owner: "{{ target_user }}"
   when: inventory_hostname in groups['workers']
 
-- name: Déployer slaves pour le NameNode
+- name: Déployer slaves pour les Datanodes
   template:
     src: slaves
     dest: "{{ hadoop_home }}/etc/hadoop/slaves"
