@@ -1,0 +1,16 @@
+---
+- name: S'assurer que le répertoire .ssh existe
+  file:
+    path: "/home/{{ target_user }}/.ssh" 
+    state: directory
+    mode: '0700'
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+
+- name: Déployer la clé ssh (Clé Privée) sur le Master/Namenode
+  copy:
+    src: "gcp_vm_key_nopass" 
+    dest: "/home/{{ target_user }}/.ssh/gcp_vm_key_nopass" 
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0600' 

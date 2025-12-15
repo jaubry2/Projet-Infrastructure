@@ -1,0 +1,4 @@
+---
+target_user: "terraform-user"
+install_base_dir: "/home/{{target_user}}/.ssh"
+ssh_file_name: "gcp_vm_key_nopass"
