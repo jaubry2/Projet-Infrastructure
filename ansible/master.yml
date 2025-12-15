@@ -1,8 +1,10 @@
 ---
-- name: Installation de la Big Data Stack
+- name: Installation de la Big Data Stack (Master)
   hosts: master
   become: yes
   roles:
     - java
     - hadoop
     - spark
+    - wordcount
+    - ssh
