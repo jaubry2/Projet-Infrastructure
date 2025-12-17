@@ -26,6 +26,27 @@ resource "google_compute_firewall" "allow_ssh" {
   description = "Autorise le trafic SSH entrant pour la connexion Ansible."
 }
 
+resource "google_compute_firewall" "allow_internal_traffic" {
+  name    = "allow-all-internal"
+  network = google_compute_network.custom_vpc_network.name
+
+  # On autorise tout le trafic TCP, UDP et ICMP (ping) entre les machines
+  allow {
+    protocol = "tcp"
+  }
+  allow {
+    protocol = "udp"
+  }
+  allow {
+    protocol = "icmp"
+  }
+
+  # On limite cette règle UNIQUEMENT aux machines qui sont dans ton sous-réseau 10.10.0.0/24
+  source_ranges = ["10.10.0.0/24"]
+  
+  description = "Autorise les nœuds du cluster à communiquer entre eux sur tous les ports."
+}
+
 # Routeur Cloud pour le NAT
 resource "google_compute_router" "nat_router" {
   name    = "router-for-nat"
