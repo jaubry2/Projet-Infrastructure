@@ -14,3 +14,25 @@
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
     mode: '0600' 
+
+- name: Déployer la clé ssh (Clé Publique) sur le Master/Namenode
+  copy:
+    src: "gcp_vm_key_nopass.pub" 
+    dest: "/home/{{ target_user }}/.ssh/gcp_vm_key_nopass.pub" 
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0600' 
+
+- name: Configurer le fichier SSH config pour l'utilisateur
+  blockinfile:
+    path: "/home/{{ target_user }}/.ssh/config"
+    create: yes
+    mode: '0600'
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    block: |
+      Host 10.10.0.*
+          IdentityFile ~/.ssh/gcp_vm_key_nopass
+          User {{ target_user }}
+          StrictHostKeyChecking no
+          UserKnownHostsFile /dev/null
