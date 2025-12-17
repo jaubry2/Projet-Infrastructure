@@ -36,3 +36,23 @@
           User {{ target_user }}
           StrictHostKeyChecking no
           UserKnownHostsFile /dev/null
+
+- name: "S'assurer que l'utilisateur peut se connecter à lui-même"
+  shell: |
+    cat /home/{{ target_user }}/.ssh/gcp_vm_key_nopass.pub >> /home/{{ target_user }}/.ssh/authorized_keys
+    chown {{ target_user }}:{{ target_user }} /home/{{ target_user }}/.ssh/authorized_keys
+    chmod 600 /home/{{ target_user }}/.ssh/authorized_keys
+  args:
+    creates: "/home/{{ target_user }}/.ssh/authorized_keys_done"
+
+- name: "Désactiver la vérification stricte des clés SSH (évite le yes/no)"
+  copy:
+    dest: "/home/{{ target_user }}/.ssh/config"
+    content: |
+      Host *
+          StrictHostKeyChecking no
+          UserKnownHostsFile /dev/null
+          IdentityFile /home/{{ target_user }}/.ssh/gcp_vm_key_nopass
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0600'
