@@ -4,6 +4,16 @@
     path: "{{ install_base_dir }}"
     state: directory
     mode: '0755'
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+
+- name: "Création manuelle du dossier logs Spark avec les bons droits"
+  file:
+    path: "/opt/spark/spark-2.4.3-bin-hadoop2.7/logs"
+    state: directory
+    owner: "terraform-user"
+    group: "terraform-user"
+    mode: '0775'
 
 - name: Télécharger et extraire Spark
   unarchive:
@@ -11,6 +21,17 @@
     dest: "{{ install_base_dir }}"
     remote_src: yes
     creates: "{{ spark_home }}"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+
+- name: Corriger les permissions pour le répertoire de travail Spark
+  ansible.builtin.file:
+    path: "/opt/spark/spark-2.4.3-bin-hadoop2.7"
+    owner: "terraform-user"
+    group: "terraform-user"
+    recurse: yes
+    state: directory
+  become: yes
 
 - name: Configurer SPARK_HOME et PATH dans le .bashrc
   blockinfile:
@@ -22,18 +43,19 @@
     create: yes
     mode: '0644'
     owner: "{{ target_user }}"
+    group: "{{ target_user }}"
 
-- name: Déployer slaves sur les NameNodes
+- name: Déployer slaves sur le NameNode
   template:
     src: slaves
     dest: "{{ spark_home }}/conf/slaves"
     owner: "{{ target_user }}"
-  when: inventory_hostname in groups['workers']
+    group: "{{ target_user }}"
 
-- name: Déployer spark-env.sh sur le DataNode
+- name: Déployer spark-env.sh sur le DataNode et les DataNodes
   template:
     src: spark-env.sh
     dest: "{{ spark_home }}/conf/spark-env.sh"
     owner: "{{ target_user }}"
-  when: inventory_hostname in groups['master']
+    group: "{{ target_user }}"
 
