@@ -3,7 +3,7 @@ resource "local_file" "ansible_inventory" {
   content  = <<-EOT
 [all:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
-namenode_ip=${google_compute_instance.nodes["master"].network_interface[0].access_config[0].nat_ip}
+namenode_ip=${google_compute_instance.nodes["master"].network_interface[0].network_ip}
 datanodes_ips=${
     join(",", [
         for key, node in google_compute_instance.nodes : 
