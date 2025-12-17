@@ -4,6 +4,8 @@
     path: "{{ install_base_dir }}"
     state: directory
     mode: '0755'
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
 
 - name: Télécharger et extraire le JDK
   unarchive:
@@ -11,6 +13,8 @@
     dest: "{{ install_base_dir }}"
     remote_src: yes
     creates: "{{ java_home }}"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
 
 - name: Configurer JAVA_HOME et PATH dans le .bashrc
   blockinfile:
@@ -22,3 +26,4 @@
     create: yes
     mode: '0644'
     owner: "{{ target_user }}"
+    group: "{{ target_user }}"
