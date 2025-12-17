@@ -4,6 +4,8 @@
     path: "{{ install_base_dir }}"
     state: directory
     mode: '0755'
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
 
 - name: Télécharger et extraire le projet à éxécuter
   unarchive:
@@ -12,9 +14,19 @@
     remote_src: yes
     creates: "{{ wordcount_home }}"
     owner: "{{ target_user }}"
+    group: "{{ target_user }}"
 
-- name: Modifier le fichier start.sh
-  template:
-    src: start.sh
-    dest: "{{wordcount_home}}/start.sh"
+- name: Déployer les scripts avec les bonnes permissions
+  ansible.builtin.template:
+    src: "{{ item }}"     
+    dest: "{{ wordcount_home }}/{{ item }}"
     owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0755'
+  loop:
+    - comp.sh
+    - copy.sh
+    - generates.sh
+    - run.sh
+    - start.sh
+    - stop.sh
