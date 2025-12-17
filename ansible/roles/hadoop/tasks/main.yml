@@ -4,6 +4,16 @@
     path: "{{ install_base_dir }}"
     state: directory
     mode: "0755"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+
+- name: "Création  manuelle du dossier logs Hadoop avec les bons droits"
+  ansible.builtin.file:
+    path: "/opt/hadoop/hadoop-2.7.1/logs"
+    state: directory
+    owner: "terraform-user"
+    group: "terraform-user"
+    mode: '0775'
 
 - name: Télécharger et extraire Hadoop
   unarchive:
@@ -11,6 +21,8 @@
     dest: "{{ install_base_dir }}"
     remote_src: yes
     creates: "{{ hadoop_home }}"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
 
 - name: Configurer HADOOP_HOME et PATH dans le .bashrc
   blockinfile:
@@ -22,31 +34,31 @@
     create: yes
     mode: "0644"
     owner: "{{ target_user }}"
+    group: "{{ target_user }}"
 
-- name: Déployer hadoop-env.sh sur le NameNode
+- name: Déployer hadoop-env.sh sur le NameNode et les DataNodes
   template:
     src: hadoop-env.sh
     dest: "{{ hadoop_home }}/etc/hadoop/hadoop-env.sh"
     owner: "{{ target_user }}"
-  when: inventory_hostname in groups['master']
+    group: "{{ target_user }}"
 
 - name: Déployer core-site.xml sur le NameNode
   template:
     src: core-site.xml
     dest: "{{ hadoop_home }}/etc/hadoop/core-site.xml"
     owner: "{{ target_user }}"
-  when: inventory_hostname in groups['master']
+    group: "{{ target_user }}"
 
 - name: Déployer hdfs-site.xml sur les DataNode
   template:
     src: hdfs-site.xml
     dest: "{{ hadoop_home }}/etc/hadoop/hdfs-site.xml"
     owner: "{{ target_user }}"
-  when: inventory_hostname in groups['workers']
 
-- name: Déployer slaves pour les Datanodes
+- name: Déployer slaves sur le NameNode
   template:
     src: slaves
     dest: "{{ hadoop_home }}/etc/hadoop/slaves"
     owner: "{{ target_user }}"
-  when: inventory_hostname in groups['workers']
+    group: "{{ target_user }}"
