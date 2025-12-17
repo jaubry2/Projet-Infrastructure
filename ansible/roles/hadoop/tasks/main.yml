@@ -7,13 +7,6 @@
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
 
-- name: "Création  manuelle du dossier logs Hadoop avec les bons droits"
-  ansible.builtin.file:
-    path: "/opt/hadoop/hadoop-2.7.1/logs"
-    state: directory
-    owner: "terraform-user"
-    group: "terraform-user"
-    mode: '0775'
 
 - name: Télécharger et extraire Hadoop
   unarchive:
@@ -23,6 +16,14 @@
     creates: "{{ hadoop_home }}"
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
+
+- name: "Création  manuelle du dossier logs Hadoop avec les bons droits"
+  ansible.builtin.file:
+    path: "/opt/hadoop/hadoop-2.7.1/logs"
+    state: directory
+    owner: "terraform-user"
+    group: "terraform-user"
+    mode: '0775'
 
 - name: Configurer HADOOP_HOME et PATH dans le .bashrc
   blockinfile:
