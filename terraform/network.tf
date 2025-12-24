@@ -30,7 +30,7 @@ resource "google_compute_router" "router" {
 # Cloud NAT (IPv4 only)
 resource "google_compute_router_nat" "nat" {
   name   = "nat-cluster-spark"
-  router = google_compute_router.router.id
+  router = google_compute_router.router.name
   region = "us-central1"
 
   nat_ip_allocate_option             = "AUTO_ONLY"
