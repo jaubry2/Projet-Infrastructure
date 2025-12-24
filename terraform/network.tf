@@ -1,18 +1,3 @@
-terraform { 
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "6.8.0"
-    }
-  }
-}
-
-provider "google" {
-  project = "cluster-spark-482013"
-  region  = "us-central1"
-
-}
-
 # VPC (MTU 1460)
 resource "google_compute_network" "vpc_network" {
   name                    = "vpc-cluster-spark"
