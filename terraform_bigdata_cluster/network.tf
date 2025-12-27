@@ -8,7 +8,7 @@ resource "google_compute_network" "vpc_network" {
 # Subnet IPv4 only: 10.10.10.0/24
 resource "google_compute_subnetwork" "subnet" {
   name          = "subnet-cluster-spark"
-  region        = "us-central1"
+  region        = var.region
   network       = google_compute_network.vpc_network.id
   ip_cidr_range = "10.10.10.0/24"
 
@@ -23,7 +23,7 @@ resource "google_compute_subnetwork" "subnet" {
 # Cloud Router (requis pour Cloud NAT)
 resource "google_compute_router" "router" {
   name    = "router-cluster-spark"
-  region  = "us-central1"
+  region  = var.region
   network = google_compute_network.vpc_network.id
 }
 
@@ -31,7 +31,7 @@ resource "google_compute_router" "router" {
 resource "google_compute_router_nat" "nat" {
   name   = "nat-cluster-spark"
   router = google_compute_router.router.name
-  region = "us-central1"
+  region = var.region
 
   nat_ip_allocate_option             = "AUTO_ONLY"
   source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
