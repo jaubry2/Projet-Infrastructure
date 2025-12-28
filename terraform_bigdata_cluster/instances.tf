@@ -29,6 +29,8 @@ resource "google_compute_instance" "master" {
   metadata = {
     ssh-keys = "${var.ssh_user}:${file(var.my_public_key)}"
   }
+
+  allow_stopping_for_update = true
 }
 
 
@@ -63,4 +65,6 @@ resource "google_compute_instance" "workers" {
   metadata = {
     ssh-keys = "${var.ssh_user}:${file(var.my_public_key)}"
   }
+
+  allow_stopping_for_update = true
 }

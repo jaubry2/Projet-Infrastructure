@@ -3,7 +3,7 @@ resource "local_file" "ansible_inventory" {
   content  = <<-EOT
 [all:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
-ansible_ssh_private_key_file=${var.my_public_key}
+ansible_ssh_private_key_file=${replace(var.my_public_key, ".pub", "")}
 ansible_user=${var.ssh_user}
 namenode_ip=${google_compute_instance.master.network_interface[0].network_ip}
 datanodes_ips=${
@@ -24,8 +24,7 @@ ${worker.name} ansible_host=${worker.network_interface[0].network_ip}
 
 
 [workers:vars]
-ansible_ssh_common_args='-J ${var.ssh_user}@${google_compute_instance.master.network_interface[0].access_config[0].nat_ip}'
-
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -i ${replace(var.my_public_key, ".pub", "")} ${var.ssh_user}@${google_compute_instance.master.network_interface[0].access_config[0].nat_ip}"'
 
 EOT
 }
