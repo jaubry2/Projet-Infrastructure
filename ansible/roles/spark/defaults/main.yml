@@ -3,4 +3,4 @@ spark_url: "https://hagimont.freeboxos.fr/hagimont/software/spark-2.4.3-bin-hado
 install_base_dir: "/opt/spark"
 spark_folder_name: "spark-2.4.3-bin-hadoop2.7"
 spark_home: "{{ install_base_dir }}/{{ spark_folder_name }}"
-target_user: "terraform-user"
+target_user: "newsletters_box149_gmail_com"

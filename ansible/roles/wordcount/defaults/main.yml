@@ -1,6 +1,6 @@
 ---
 wordcount_url: "https://hagimont.freeboxos.fr/hagimont/resources-N7/bigdata/scale-subject.tgz"
-target_user: "terraform-user"
+target_user: "newsletters_box149_gmail_com"
 install_base_dir: "/home/{{target_user}}/wordcount"
 wordcount_folder_name: "scale-subject"
 wordcount_home: "{{ install_base_dir }}/{{ wordcount_folder_name }}"
