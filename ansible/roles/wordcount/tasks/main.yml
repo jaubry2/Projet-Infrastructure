@@ -18,15 +18,16 @@
 
 - name: Déployer les scripts avec les bonnes permissions
   ansible.builtin.template:
-    src: "{{ item }}"     
-    dest: "{{ wordcount_home }}/{{ item }}"
+    src: "{{ item.name }}"     
+    dest: "{{ wordcount_home }}/{{ item.name }}"
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
     mode: '0755'
   loop:
-    - comp.sh
-    - copy.sh
-    - generates.sh
-    - run.sh
-    - start.sh
-    - stop.sh
+    - { name: 'start.sh', target: 'master' }
+    - { name: 'stop.sh', target: 'master' }
+    - { name: 'comp.sh', target: 'edge' }
+    - { name: 'copy.sh', target: 'edge' }
+    - { name: 'generates.sh', target: 'edge' }
+    - { name: 'run.sh', target: 'edge' }
+  when: item.target in group_names
