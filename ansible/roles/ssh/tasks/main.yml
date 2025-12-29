@@ -7,52 +7,43 @@
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
 
-- name: Déployer la clé ssh (Clé Privée) sur le Master/Namenode
-  copy:
-    src: "gcp_vm_key_nopass" 
-    dest: "/home/{{ target_user }}/.ssh/gcp_vm_key_nopass" 
+- name: Générer la clé SSH sur le Master
+  openssh_keypair:
+    path: "{{ ssh_key_path }}"
+    type: ed25519
+    state: present
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
-    mode: '0600' 
-
-- name: Déployer la clé ssh (Clé Publique) sur le Master/Namenode
-  copy:
-    src: "gcp_vm_key_nopass.pub" 
-    dest: "/home/{{ target_user }}/.ssh/gcp_vm_key_nopass.pub" 
-    owner: "{{ target_user }}"
-    group: "{{ target_user }}"
-    mode: '0600' 
-
-- name: Configurer le fichier SSH config pour l'utilisateur
-  blockinfile:
-    path: "/home/{{ target_user }}/.ssh/config"
-    create: yes
     mode: '0600'
-    owner: "{{ target_user }}"
-    group: "{{ target_user }}"
-    block: |
-      Host 10.10.0.*
-          IdentityFile ~/.ssh/gcp_vm_key_nopass
-          User {{ target_user }}
-          StrictHostKeyChecking no
-          UserKnownHostsFile /dev/null
+  register: master_sh_info
 
-- name: "S'assurer que l'utilisateur peut se connecter à lui-même"
-  shell: |
-    cat /home/{{ target_user }}/.ssh/gcp_vm_key_nopass.pub >> /home/{{ target_user }}/.ssh/authorized_keys
-    chown {{ target_user }}:{{ target_user }} /home/{{ target_user }}/.ssh/authorized_keys
-    chmod 600 /home/{{ target_user }}/.ssh/authorized_keys
-  args:
-    creates: "/home/{{ target_user }}/.ssh/authorized_keys_done"
+- name: Lire la clé publique générée
+  slurp:
+    src: "{{ ssh_key_path }}.pub"
+  register: master_pub_key_encoded
 
-- name: "Désactiver la vérification stricte des clés SSH (évite le yes/no)"
+- name: xtraire la clé publique
+  set_fact:
+    master_pub_key: "{{ master_pub_key_encoded['content'] | b64decode }}"
+
+- name: Pousser la clé du Master vers Google OS Login
+  delegate_to: localhost
+  become: no
+  command: >
+    gcloud compute os-login ssh-keys add 
+    --key="{{ master_pub_key }}" 
+    --project={{ gcp_project_id }}
+  changed_when: true
+
+- name: Créer le fichier config SSH propre
   copy:
     dest: "/home/{{ target_user }}/.ssh/config"
     content: |
       Host *
           StrictHostKeyChecking no
           UserKnownHostsFile /dev/null
-          IdentityFile /home/{{ target_user }}/.ssh/gcp_vm_key_nopass
+          IdentityFile {{ ssh_key_path }}
+          User {{ target_user }}
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
     mode: '0600'
