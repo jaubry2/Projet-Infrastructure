@@ -27,8 +27,8 @@
 - name: Corriger les permissions pour le répertoire de travail Spark
   ansible.builtin.file:
     path: "/opt/spark/spark-2.4.3-bin-hadoop2.7"
-    owner: "terraform-user"
-    group: "terraform-user"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
     recurse: yes
     state: directory
   become: yes
