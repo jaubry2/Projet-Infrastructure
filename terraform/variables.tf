@@ -17,10 +17,10 @@ variable "zone" {
 variable "ssh_user" {
   description = "Nom de l'utilisateur SSH"
   type        = string
-  default     = "terraform-user"
+  default     = "newsletters_box149_gmail_com"
 }
 variable "ssh_pub_key" {
   description = "Lien vers la clé publique SSH"
   type        = string
-  default     = "/Users/jules/.ssh/gcp_vm_key_nopass.pub"
+  default     = "/Users/jules/.ssh/google_compute_engine.pub"
 }
