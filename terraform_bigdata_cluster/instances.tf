@@ -24,10 +24,9 @@ resource "google_compute_instance" "master" {
     scopes = ["cloud-platform"]
   }
 
-  # Ajout des clés publiques dans authorized_keys via metadata
-  # Format GCE: "username:ssh-rsa AAAA... comment"
+  # Activation authentification ssh avec OS Login
   metadata = {
-    ssh-keys = "${var.ssh_user}:${file(var.my_public_key)}"
+    enable-oslogin = "TRUE"
   }
 
   allow_stopping_for_update = true
@@ -60,11 +59,20 @@ resource "google_compute_instance" "workers" {
     scopes = ["cloud-platform"]
   }
 
-  # Ajout des clés publiques dans authorized_keys via metadata
-  # Format GCE: "username:ssh-rsa AAAA... comment"
+  # Activation authentification ssh avec OS Login
   metadata = {
-    ssh-keys = "${var.ssh_user}:${file(var.my_public_key)}"
+    enable-oslogin = "TRUE"
   }
 
   allow_stopping_for_update = true
+}
+
+
+# Association de la clé ssh au compte admin 
+data "google_client_openid_userinfo" "me" {
+}
+
+resource "google_os_login_ssh_public_key" "default" {
+  user = data.google_client_openid_userinfo.me.email
+  key  = file(var.my_public_key)
 }

@@ -14,7 +14,6 @@ terraform {
 provider "google" {
   project = "cluster-spark-482013"
   region  = "us-central1"
-  impersonate_service_account = "admin-spark@cluster-spark-482013.iam.gserviceaccount.com"
 }
 
 
