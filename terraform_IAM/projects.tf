@@ -23,7 +23,8 @@ locals {
     "serviceusage.googleapis.com",
     "compute.googleapis.com",
     "logging.googleapis.com",
-    "monitoring.googleapis.com"
+    "monitoring.googleapis.com",
+    "iamcredentials.googleapis.com"
   ]
 }
 
@@ -38,13 +39,5 @@ resource "google_project_service" "front_edge_apis" {
   for_each           = toset(local.common_apis)
   project            = google_project.front_edge.project_id
   service            = each.value
-  disable_on_destroy = false
-}
-
-# API à activer dans My First Project, pour que les comptes principaux associes puissent faire impersonnifier d'autres comptes
-resource "google_project_service" "iam_sa_credentials" {
-  project = "project-17f76447-3428-45d5-ab1"
-  service = "iamcredentials.googleapis.com"
-
   disable_on_destroy = false
 }
