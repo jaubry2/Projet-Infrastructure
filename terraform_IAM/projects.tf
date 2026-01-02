@@ -24,7 +24,9 @@ locals {
     "compute.googleapis.com",
     "logging.googleapis.com",
     "monitoring.googleapis.com",
-    "iamcredentials.googleapis.com"
+    "iamcredentials.googleapis.com",
+    "servicemanagement.googleapis.com",
+    "storage-api.googleapis.com"
   ]
 }
 

@@ -5,7 +5,7 @@ resource "google_compute_instance" "master" {
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-12-bookworm-v20251209"
+      image = "projects/cluster-spark-482013/global/images/family/image_infra_debian"
       size  = 20
       type  = "pd-balanced"
     }
@@ -42,7 +42,7 @@ resource "google_compute_instance" "workers" {
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-12-bookworm-v20251209"
+      image = "projects/cluster-spark-482013/global/images/family/image_infra_debian"
       size  = 10
       type  = "pd-balanced"
     }

@@ -4,6 +4,7 @@ locals {
     "roles/compute.networkAdmin",
     "roles/iam.serviceAccountUser",
     "roles/compute.osAdminLogin",
+    "roles/artifactregistry.writer"
   ]
 
   ssh_bot_roles = = [
