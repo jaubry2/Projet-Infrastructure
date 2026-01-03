@@ -5,8 +5,8 @@ resource "google_compute_instance" "master" {
 
   boot_disk {
     initialize_params {
-      image = "projects/cluster-spark-482013/global/images/family/image_infra_debian"
-      size  = 20
+      image = "image-infra-debian"
+      #size  = 20
       type  = "pd-balanced"
     }
   }
@@ -20,7 +20,7 @@ resource "google_compute_instance" "master" {
 
   # Service Account par défaut + scope complet API
   service_account {
-    email  = "default"
+    email  = "ssh-bot@cluster-spark-482013.iam.gserviceaccount.com"
     scopes = ["cloud-platform"]
   }
 
@@ -42,8 +42,8 @@ resource "google_compute_instance" "workers" {
 
   boot_disk {
     initialize_params {
-      image = "projects/cluster-spark-482013/global/images/family/image_infra_debian"
-      size  = 10
+      image = "image-infra-debian"
+      #size  = 10
       type  = "pd-balanced"
     }
   }
@@ -52,12 +52,6 @@ resource "google_compute_instance" "workers" {
   network_interface {
     subnetwork = google_compute_subnetwork.subnet.id
     }
-
-  # Service Account par défaut + scope complet API
-  service_account {
-    email  = "default"
-    scopes = ["cloud-platform"]
-  }
 
   # Activation authentification ssh avec OS Login
   metadata = {
@@ -73,6 +67,7 @@ data "google_client_openid_userinfo" "me" {
 }
 
 resource "google_os_login_ssh_public_key" "default" {
+  project = "cluster-spark-482013"
   user = data.google_client_openid_userinfo.me.email
   key  = file(var.my_public_key)
 }

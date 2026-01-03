@@ -5,17 +5,6 @@ resource "google_compute_network" "vpc_cluster" {
   mtu                     = 1460
 }
 
-#
-resource "local_file" "vpc_cluster_id" {
-  filename = "${path.module}/../terraform_edge/vpc_cluster_id.tf"
-  content  = <<-EOT
-variable "vpc_cluster_id" {
-  type    = string
-  default = "${google_compute_network.vpc_cluster.id}" 
-} 
-EOT
-}
-
 # Subnet IPv4 only: 10.10.10.0/24
 resource "google_compute_subnetwork" "subnet" {
   name          = "subnet-cluster-spark"
@@ -29,7 +18,6 @@ resource "google_compute_subnetwork" "subnet" {
   # Souvent utile si tes VM privées doivent accéder aux APIs Google via IP privées
   private_ip_google_access = true
 } 
-
 
 # Cloud Router (requis pour Cloud NAT)
 resource "google_compute_router" "router" {
@@ -95,18 +83,9 @@ resource "google_compute_firewall" "allow_all_from_subnet" {
   direction = "INGRESS"
   priority  = 900  # plus prioritaire que 1000 (plus petit = plus prioritaire)
 
-  source_ranges = [google_compute_subnetwork.subnet.ip_cidr_range, "20.20.20.0/24"]
+  source_ranges = [google_compute_subnetwork.subnet.ip_cidr_range,"192.168.20.0/24"]
 
   allow {
     protocol = "all"
   }
-}
-
-resource "google_compute_route" "default_internet" {
-  name       = "default-internet-route"
-  network    = google_compute_network.vpc_cluster.id
-  dest_range = "0.0.0.0/0"
-  priority   = 1000
-
-  next_hop_gateway = "default-internet-gateway"
 }
