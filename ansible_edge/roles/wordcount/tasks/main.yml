@@ -1,0 +1,48 @@
+---
+- name: Télécharger et extraire le projet à éxécuter
+  unarchive:
+    src: "{{ wordcount_url }}"
+    dest: "{{ install_base_dir }}"
+    remote_src: yes
+    creates: "{{ wordcount_home }}"
+
+- name: Déploiment des bonnes permissions sur le dossier wordcount et l'ensemble de ses sous-fichiers
+  file:
+    path: "{{ wordcount_home }}"
+    state: directory
+    mode: '2775'
+    owner: "root"
+    group: "{{ target_group }}"
+
+- name: Déployer les scripts avec les bonnes permissions
+  ansible.builtin.template:
+    src: "{{ item.name }}"
+    dest: "{{ wordcount_home }}/{{ item.name }}"
+    owner: "{{ my_user }}"
+    group: "{{ target_group }}"
+    mode: '0775'
+  loop:
+    - { name: 'start.sh', target: 'master' }
+    - { name: 'stop.sh', target: 'master' }
+    - { name: 'comp.sh', target: 'edge' }
+    - { name: 'copy.sh', target: 'edge' }
+    - { name: 'generates.sh', target: 'edge' }
+    - { name: 'run.sh', target: 'edge' }
+  when: item.target in group_names
+
+
+- name: Wordcount permissions
+  file:
+    path: "{{ wordcount_home }}/WordCount.java"
+    state: file
+    owner: "{{ my_user }}"
+    group: "{{ target_group }}"
+    mode: '0664'
+
+- name: Set permissions on filesample.txt
+  ansible.builtin.file:
+    path: "{{ wordcount_home }}/filesample.txt"
+    state: file
+    owner: "{{ my_user }}"
+    group: "{{ target_group }}"
+    mode: '0664'

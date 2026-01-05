@@ -1,0 +1,6 @@
+---
+install_base_dir: "/home/bigdata"
+spark_folder_name: "spark-2.4.3-bin-hadoop2.7"
+spark_home: "{{ install_base_dir }}/{{ spark_folder_name }}"
+my_user: "josua_jerrynithiyendra02_gmail_c"
+target_group: "admin_bigdata"

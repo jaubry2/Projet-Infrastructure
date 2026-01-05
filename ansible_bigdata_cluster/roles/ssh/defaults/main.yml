@@ -1,0 +1,6 @@
+---
+my_user: "josua_jerrynithiyendra02_gmail_c"
+install_base_dir: "/home/{{my_user}}/.ssh"
+ssh_file_name: "key_master_worker"
+ssh_key_path: "{{install_base_dir}}/{{ssh_file_name}}"
+gcp_project_id: "cluster-spark-482013"

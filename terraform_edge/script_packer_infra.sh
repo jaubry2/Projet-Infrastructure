@@ -18,8 +18,8 @@ GROUP="admin_edge_front"
 sudo groupadd -f -r "${GROUP}" || true
 sudo mkdir -p "${DEST_DIR}"
 sudo chown root:root "${DEST_DIR}"
-sudo chgrp -R "${GROUP}" "${DEST_DIR}"
-sudo chmod 775 "${DEST_DIR}"
+sudo chgrp "${GROUP}" "${DEST_DIR}"
+sudo chmod 2775 "${DEST_DIR}"
 
 
 # Mise à jour système et dépendances
@@ -41,6 +41,15 @@ sudo tar -xzf spark-2.4.3-bin-hadoop2.7.tgz -o spark-2.4.3-bin-hadoop2.7
 sudo rm jdk-8u202-linux-x64.tar.gz
 sudo rm hadoop-2.7.1.tar.gz
 sudo rm spark-2.4.3-bin-hadoop2.7.tgz
+
+
+# Corriger le groupe sur les dossiers et fichiers existants (post-extract)
+sudo chgrp -R "${GROUP}" "${DEST_DIR}/hadoop-2.7.1" "${DEST_DIR}/jdk1.8.0_202" "${DEST_DIR}/spark-2.4.3-bin-hadoop2.7"
+
+
+# Assurer setgid sur tous les dossiers extraits (pour le futur)
+sudo find "${DEST_DIR}/hadoop-2.7.1" "${DEST_DIR}/jdk1.8.0_202" "${DEST_DIR}/spark-2.4.3-bin-hadoop2.7" -type d -exec chmod 2775 {} +
+
 
 echo "OK : téléchargé et extrait dans ${DEST_DIR}"
 

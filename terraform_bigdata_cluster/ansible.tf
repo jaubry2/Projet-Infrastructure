@@ -24,7 +24,7 @@ ${worker.name} ansible_host=${worker.network_interface[0].network_ip}
 
 
 [workers:vars]
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -i ${replace(var.my_public_key, ".pub", "")} josua_jerrynithiyendra02_gmail_c@${google_compute_instance.master.network_interface[0].access_config[0].nat_ip}"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -o StrictHostKeyChecking=no -W %h:%p -i ${replace(var.my_public_key, ".pub", "")} josua_jerrynithiyendra02_gmail_c@${google_compute_instance.master.network_interface[0].access_config[0].nat_ip}"'
 
 EOT
 }

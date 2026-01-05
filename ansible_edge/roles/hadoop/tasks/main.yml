@@ -1,0 +1,51 @@
+---
+- name: "Création  manuelle du dossier logs Hadoop avec les bons droits"
+  ansible.builtin.file:
+    path: "{{ hadoop_home }}/logs"
+    state: directory
+    mode: '2775'
+    owner: "root"
+    group: "{{ target_group }}"
+
+- name: Configurer HADOOP_HOME et PATH dans le .bashrc
+  blockinfile:
+    path: "{{ install_base_dir }}/.bashrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: HADOOP"
+    block: |
+      export HADOOP_HOME={{ hadoop_home }}
+      export PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
+    create: yes
+    mode: '0664'
+    owner: "root"
+    group: "{{ target_group }}"
+
+- name: Déployer hadoop-env.sh sur le NameNode et les DataNodes
+  template:
+    src: hadoop-env.sh
+    dest: "{{ hadoop_home }}/etc/hadoop/hadoop-env.sh"
+    owner: "{{ my_user }}"
+    group: "{{ target_group }}"
+    mode: '0775'
+
+- name: Déployer core-site.xml sur le NameNode
+  template:
+    src: core-site.xml
+    dest: "{{ hadoop_home }}/etc/hadoop/core-site.xml"
+    owner: "{{ my_user }}"
+    group: "{{ target_group }}"
+    mode: '0664'
+- name: Déployer hdfs-site.xml sur les DataNode
+  template:
+    src: hdfs-site.xml
+    dest: "{{ hadoop_home }}/etc/hadoop/hdfs-site.xml"
+    owner: "{{ my_user }}"
+    group: "{{ target_group }}"
+    mode: '0664'
+
+- name: Déployer slaves sur le NameNode
+  template:
+    src: slaves
+    dest: "{{ hadoop_home }}/etc/hadoop/slaves"
+    owner: "{{ my_user }}"
+    group: "{{ target_group }}"
+    mode: '0664'

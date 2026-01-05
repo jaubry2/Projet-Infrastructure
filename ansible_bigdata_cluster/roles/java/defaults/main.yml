@@ -1,0 +1,6 @@
+---
+install_base_dir: "/home/bigdata"
+java_folder_name: "jdk1.8.0_202"
+java_home: "{{ install_base_dir }}/{{ java_folder_name }}"
+my_user: "josua_jerrynithiyendra02_gmail_c"
+target_group: "admin_bigdata"

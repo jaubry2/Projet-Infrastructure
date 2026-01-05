@@ -1,0 +1,6 @@
+---
+install_base_dir: "/home/bigdata"
+hadoop_folder_name: "hadoop-2.7.1"
+hadoop_home: "{{ install_base_dir }}/{{ hadoop_folder_name }}"
+my_user: "josua_jerrynithiyendra02_gmail_c"
+target_group: "admin_bigdata"

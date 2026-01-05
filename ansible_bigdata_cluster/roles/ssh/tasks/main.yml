@@ -1,0 +1,49 @@
+---
+- name: S'assurer que le répertoire .ssh existe
+  file:
+    path: "/home/{{ my_user }}/.ssh"
+    state: directory
+    mode: '0700'
+    owner: "{{ my_user }}"
+    group: "{{ my_user }}"
+
+- name: Générer la clé SSH sur le Master
+  openssh_keypair:
+    path: "{{ ssh_key_path }}"
+    type: ed25519
+    state: present
+    owner: "{{ my_user }}"
+    group: "{{ my_user }}"
+    mode: '0600'
+  register: master_sh_info
+
+- name: Lire la clé publique générée
+  slurp:
+    src: "{{ ssh_key_path }}.pub"
+  register: master_pub_key_encoded
+
+- name: extraire la clé publique
+  set_fact:
+    master_pub_key: "{{ master_pub_key_encoded['content'] | b64decode }}"
+
+- name: Pousser la clé du Master vers Google OS Login
+  delegate_to: localhost
+  become: no
+  command: >
+    gcloud compute os-login ssh-keys add
+    --key="{{ master_pub_key }}"
+    --project={{ gcp_project_id }}
+  changed_when: true
+
+- name: Créer le fichier config SSH propre
+  copy:
+    dest: "/home/{{ my_user }}/.ssh/config"
+    content: |
+      Host *
+          StrictHostKeyChecking no
+          UserKnownHostsFile /dev/null
+          IdentityFile {{ ssh_key_path }}
+          User {{ my_user }}
+    owner: "{{ my_user }}"
+    group: "{{ my_user }}"
+    mode: '0600'

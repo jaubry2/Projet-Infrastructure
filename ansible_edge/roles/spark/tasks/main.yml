@@ -1,0 +1,36 @@
+---
+- name: Création manuelle du dossier logs Spark avec les bons droits
+  file:
+    path: "{{ spark_home }}/logs"
+    state: directory
+    owner: "root"
+    group: "{{ target_group }}"
+    mode: '2775'
+
+- name: Configurer SPARK_HOME et PATH dans le .bashrc
+  blockinfile:
+    path: "{{ install_base_dir }}/.bashrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: SPARK"
+    block: |
+      export SPARK_HOME={{ spark_home }}
+      export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
+    create: yes
+    mode: '0664'
+    owner: "root"
+    group: "{{ target_group }}"
+
+- name: Déployer slaves sur le NameNode
+  template:
+    src: slaves
+    dest: "{{ spark_home }}/conf/slaves"
+    owner: "{{ my_user }}"
+    group: "{{ target_group }}"
+    mode: '0664'
+
+- name: Déployer spark-env.sh sur le DataNode et les DataNodes
+  template:
+    src: spark-env.sh
+    dest: "{{ spark_home }}/conf/spark-env.sh"
+    owner: "{{ my_user }}"
+    group: "{{ target_group }}"
+    mode: '0775'

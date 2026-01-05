@@ -1,0 +1,7 @@
+---
+wordcount_url: "https://hagimont.freeboxos.fr/hagimont/resources-N7/bigdata/scale-subject.tgz"
+my_user: "josua_jerrynithiyendra02_gmail_c"
+target_group: "admin_bigdata"
+install_base_dir: "/home/bigdata"
+wordcount_folder_name: "scale-subject"
+wordcount_home: "{{ install_base_dir }}/{{ wordcount_folder_name }}"

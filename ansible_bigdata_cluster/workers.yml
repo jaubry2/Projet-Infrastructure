@@ -1,0 +1,21 @@
+---
+- name: Ajout d'un user admin dans le groupe admin_bigdata
+  hosts: workers
+  become: yes
+  vars:  
+    admin_user: josua_jerrynithiyendra02_gmail_c
+  tasks:
+    - name: Ajouter l'utilisateur au groupe
+      user:
+        name: "{{ admin_user }}"
+        groups: admin_bigdata
+        append: yes
+
+- name: Installation de la Big Data Stack
+  hosts: workers
+  become: yes
+  roles:
+    - java
+    - hadoop
+    - spark
+

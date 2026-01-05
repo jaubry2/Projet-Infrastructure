@@ -1,0 +1,12 @@
+---
+- name: Configurer JAVA_HOME et PATH dans le .bashrc
+  blockinfile:
+    path: "{{ install_base_dir }}/.bashrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: JAVA 8"
+    block: |
+      export JAVA_HOME={{ java_home }}
+      export PATH=$JAVA_HOME/bin:$PATH
+    create: yes
+    mode: '0664'
+    owner: "root"
+    group: "{{ target_group }}"
