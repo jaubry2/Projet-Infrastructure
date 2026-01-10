@@ -24,7 +24,7 @@ resource "google_compute_instance" "nodes" {
     dynamic "access_config" {
       # La condition pour attribuer une IP publique (le bloc 'access_config')
       # est vraie si 'each.key' est 'master', 'edge', ou 'worker-1'.
-      for_each = (each.key == "master" || each.key == "edge" || each.key == "worker-1") ? [1] : []
+      for_each = (each.key == "master" || each.key == "edge") ? [1] : []
 
       content {
         # Si vous voulez l'IP temporaire par défaut, le bloc 'content' reste vide.
