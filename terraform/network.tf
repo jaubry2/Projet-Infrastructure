@@ -33,9 +33,11 @@ resource "google_compute_firewall" "allow_internal_traffic" {
   # On autorise tout le trafic TCP, UDP et ICMP (ping) entre les machines
   allow {
     protocol = "tcp"
+    ports    = ["0-65535"]
   }
   allow {
     protocol = "udp"
+    ports    = ["0-65535"]
   }
   allow {
     protocol = "icmp"
