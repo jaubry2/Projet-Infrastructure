@@ -1,8 +1,8 @@
 resource "google_compute_instance" "nodes" {
   for_each = {
     "master"   = "e2-standard-2",
-    "worker-1" = "e2-standard-2",
-    "worker-2" = "e2-standard-2",
+    "worker-1" = "e2-standard-4",
+    "worker-2" = "e2-standard-4",
     "edge"     = "e2-standard-2"
   }
   name         = "${each.key}-node"
