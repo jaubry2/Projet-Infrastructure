@@ -11,3 +11,5 @@ hdfs dfs -cat /output/part*
 
 # Ou fusionne tous les fichiers de sortie en un seul fichier local
 hdfs dfs -getmerge /output resultat_final.txt
+
+sudo sed -i 's/#AllowTcpForwarding yes/AllowTcpForwarding yes/' /etc/ssh/sshd_config
