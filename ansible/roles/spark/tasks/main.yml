@@ -7,12 +7,12 @@
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
 
-- name: Télécharger et extraire Spark
+- name: Télécharger et extraire Hadoop depuis Google Cloud Storage
   unarchive:
     src: "{{ spark_url }}"
     dest: "{{ install_base_dir }}"
     remote_src: yes
-    creates: "{{ spark_home }}"
+    creates: "{{ hadoop_home }}"
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
 

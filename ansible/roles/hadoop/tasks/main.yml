@@ -7,6 +7,14 @@
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
 
+- name: Télécharger et extraire Hadoop depuis Google Cloud Storage
+  unarchive:
+    src: "{{ hadoop_url }}"
+    dest: "{{ install_base_dir }}"
+    remote_src: yes
+    creates: "{{ hadoop_home }}"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
 
 - name: Télécharger et extraire Hadoop
   unarchive:
@@ -23,7 +31,7 @@
     state: directory
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
-    mode: '0775'
+    mode: "0775"
 
 - name: Configurer HADOOP_HOME et PATH dans le .bashrc
   blockinfile:
