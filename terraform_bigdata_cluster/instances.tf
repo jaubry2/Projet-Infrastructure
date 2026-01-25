@@ -6,7 +6,7 @@ resource "google_compute_instance" "master" {
   boot_disk {
     initialize_params {
       image = "image-infra-debian"
-      #size  = 20
+     #size  = 10
       type  = "pd-balanced"
     }
   }
@@ -37,13 +37,13 @@ resource "google_compute_instance" "master" {
 resource "google_compute_instance" "workers" {
   count        = length(local.workers_names)
   name         = local.workers_names[count.index]
-  machine_type = "e2-micro"
+  machine_type = "e2-medium"
   zone         = var.zone
 
   boot_disk {
     initialize_params {
       image = "image-infra-debian"
-      #size  = 10
+      #size  = 15
       type  = "pd-balanced"
     }
   }

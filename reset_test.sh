@@ -34,3 +34,12 @@ sleep 60
 
 ./ansible.sh
 
+sleep 60
+
+(
+gcloud compute ssh edge \
+    --zone=us-central1-a \
+    --project=front-edge-482211 \
+    --quiet \
+    --command="source /home/front/.bashrc && cd /home/front/scale-subject && source generates.sh filesample.txt 23 && source copy.sh && source comp.sh && source run.sh && hdfs dfs -cat /output/*"
+)

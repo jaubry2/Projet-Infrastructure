@@ -20,7 +20,7 @@ variable "my_public_key" {
 
 variable "workers_numbers" {
   type    = number
-  default = 6 
+  default = 12
 }
 
 locals {

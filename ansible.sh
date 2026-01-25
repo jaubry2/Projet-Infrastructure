@@ -3,6 +3,8 @@ echo "Lancement des playbooks en parallèle..."
 
 rm /home/joshuajn02/.ssh/known_hosts
 
+start=$(date +%s)
+
 # Lancer la configuration du Master
 cd ansible_bigdata_cluster
 ansible-playbook ./master.yml &
@@ -21,6 +23,12 @@ PID3=$!
 # Attendre la fin des trois processus
 wait $PID1 $PID2 $PID3
 
+end=$(date +%s)
+runtime=$((end - start))
+echo "Durée totale : ${runtime}s"
+
+start=$(date +%s)
+
 cd ..
 
 gcloud compute ssh master-hdfs-spark \
@@ -30,3 +38,7 @@ gcloud compute ssh master-hdfs-spark \
     --command="source /home/bigdata/.bashrc && /home/bigdata/scale-subject/start.sh && jps && hdfs dfsadmin -report"
 
 echo "Déploiement terminé."
+
+end=$(date +%s)
+runtime=$((end - start))
+echo "Durée totale : ${runtime}s"
