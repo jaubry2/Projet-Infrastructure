@@ -1,5 +1,6 @@
 ---
-java_url: "https://hagimont.freeboxos.fr/hagimont/software/jdk-8u202-linux-x64.tar.gz"
+gcs_bucket_url: "https://storage.googleapis.com/logiciel-projet-infra"
+java_url: "{{ gcs_bucket_url }}/jdk-8u202-linux-x64.tar.gz"
 install_base_dir: "/opt/java"
 java_folder_name: "jdk1.8.0_202"
 java_home: "{{ install_base_dir }}/{{ java_folder_name }}"
