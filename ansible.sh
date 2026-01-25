@@ -33,19 +33,12 @@ echo "Fin des playbook : $(date +'%H:%M:%S')"
 echo "----------------------------------------"
 
 echo "Attente de 20 secondes pour la stabilisation des services..."
-sleep 20
+sleep 10
 
 gcloud compute ssh master-node \
     --zone=europe-west1-b \
     --quiet \
     --command="source /home/newsletters_box149_gmail_com/.bashrc && bash -l /home/newsletters_box149_gmail_com/wordcount/scale-subject/start.sh"
-echo "Fin des daemons : $(date +'%H:%M:%S')"
-echo "Exécution de la génération de données sur l'Edge Node..."
-
-gcloud compute ssh edge-node \
-    --zone=europe-west1-b \
-    --quiet \
-    --command="cd /home/newsletters_box149_gmail_com/wordcount/scale-subject && source /home/newsletters_box149_gmail_com/.bashrc && source generates.sh filesample.txt 23"
 
 echo "----------------------------------------"
 echo "Déploiement terminé."
