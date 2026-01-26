@@ -25,7 +25,7 @@
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
 
-- name: "Création  manuelle du dossier logs Hadoop avec les bons droits"
+- name: Création  manuelle du dossier logs Hadoop avec les bons droits
   ansible.builtin.file:
     path: "/opt/hadoop/hadoop-2.7.1/logs"
     state: directory

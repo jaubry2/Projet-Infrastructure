@@ -34,14 +34,11 @@
 
 - name: Télécharger le jeu de données volumineux depuis GCS
   ansible.builtin.get_url:
-    # URL de ton fichier sur Cloud Storage (rendu public en lecture)
     url: "https://storage.googleapis.com/logiciel-projet-infra/data.txt"
     dest: "/tmp/data.txt"
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
     mode: '0644'
-    # Important : ne retélécharge pas si le fichier est déjà là
     force: no
-    # Augmente le timeout car le fichier peut être très lourd
     timeout: 600
   when: "'edge' in group_names"

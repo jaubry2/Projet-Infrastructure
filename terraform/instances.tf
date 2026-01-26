@@ -1,9 +1,13 @@
 resource "google_compute_instance" "nodes" {
   for_each = {
-    "master"   = "e2-standard-2",
-    "worker-1" = "e2-standard-4",
-    "worker-2" = "e2-standard-4",
-    "edge"     = "e2-standard-2"
+    "master"   = "e2-medium",
+    "worker-1" = "e2-medium",
+    "worker-2" = "e2-medium",
+    "worker-3" = "e2-medium",
+    "worker-4" = "e2-medium",
+    "worker-5" = "e2-medium",
+    "worker-6" = "e2-medium",
+    "edge"     = "e2-medium"
   }
   name         = "${each.key}-node"
   machine_type = each.value

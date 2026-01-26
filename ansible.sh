@@ -32,7 +32,7 @@ wait $PID1 $PID2 $PID3
 echo "Fin des playbook : $(date +'%H:%M:%S')"
 echo "----------------------------------------"
 
-echo "Attente de 20 secondes pour la stabilisation des services..."
+echo "Attente de 10 secondes pour la stabilisation des services..."
 sleep 10
 
 gcloud compute ssh master-node \
