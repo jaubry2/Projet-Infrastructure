@@ -31,3 +31,16 @@ Execute all deployment scripts simultaneously (or sequentially).
 # bash
 ./all.sh
 ```
+
+## Script on Edge 
+
+You need to connect to the edge node, compile the program, copy the file to HDFS, and start the execution.
+```
+# bash
+gcloud compute ssh edge-node
+cd wordcount/scale-subject
+./comp.sh
+./copy.sh
+./run.sh
+```
+
