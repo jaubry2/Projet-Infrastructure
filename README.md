@@ -1,1 +1,9 @@
-# Projet-Infrastructure
+#Intention initiale et retour critique
+
+À l’origine, mon objectif était de concevoir proche d’un environnement réel, en séparant clairement les rôles et les responsabilités. J'étais partie de l'idée d'une distinction stricte entre un nœud edge et un cluster Spark/HDFS, considérant le edge comme un front-end chargé uniquement de l’ingestion des données et de la soumission des jobs, tandis que le cluster jouait le rôle de backend. Cette approche reposait sur l’hypothèse selon laquelle le edge pouvait être conçu de manière largement indépendante du cluster, en dehors de la communication réseau.
+
+Dans cette logique, j’ai envisagé une séparation forte des environnements, allant jusqu’à la création de deux projets GCP distincts, chacun disposant de son propre VPC et subnet. Cela me permettait d'associer à chaque projet un compte principal (compte Gmail) servant d'administrateur, disposant des droits IAM nécessaires (compute et réseau). Les deux environnements étaient ensuite interconnectés via du VPC peering.
+
+Avec le recul, cette hypothèse s’est révélée incorrecte. Bien que le edge puisse être vu comme un point d’entrée, il reste étroitement couplé à la configuration du cluster Spark et HDFS, tant sur le plan logiciel qu’opérationnel. En sous-estimant cette interdépendance, j’ai complexifié inutilement l’architecture, aboutissant à une solution fonctionnelle mais disproportionnée par rapport aux objectifs du projet.
+
+C’est pour cette raison que la version finale retenue est celle de mon collègue Jules, dont l’architecture correspond mieux aux attentes : plus simple, plus cohérente et plus maintenable. Mon implémentation reste exploitable et a surtout servi de support d’apprentissage, en mettant en évidence l’importance, dans un premier temps, de comprendre les logicielles que l'on souahite mettre en place, et puis de valider les hypothèses d’architecture avant d’industrialiser une solution.
