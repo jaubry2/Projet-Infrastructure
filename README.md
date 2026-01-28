@@ -8,6 +8,7 @@ Provision the network resources and virtual machines.
 ./terraform.sh 
 ```
 
+
 ## Deploy Dependencies and Libraries
 
 Execute the Ansible playbooks to configure the environment.
@@ -16,13 +17,6 @@ Execute the Ansible playbooks to configure the environment.
 ./ansible.sh
 ```
 
-## Start Daemons on Instances
-
-Launch the background services (daemons) on the remote instances.
-```
-# bash
-./daemon.sh
-```
 
 ## Run All Scripts
 
@@ -31,6 +25,19 @@ Execute all deployment scripts simultaneously (or sequentially).
 # bash
 ./all.sh
 ```
+
+
+## Start Daemons on Instances
+
+Launch the background services (daemons) on the remote instances.
+```
+# bash
+gcloud compute ssh edge-node
+ssh < master_ip >
+source /home/newsletters_box149_gmail_com/.bashrc
+bash -l /home/newsletters_box149_gmail_com/wordcount/scale-subject/start.sh  
+```
+
 
 ## Script on Edge 
 
