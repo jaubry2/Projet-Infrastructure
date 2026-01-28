@@ -34,8 +34,9 @@ Launch the background services (daemons) on the remote instances.
 # bash
 gcloud compute ssh edge-node
 ssh < master_ip >
-source /home/newsletters_box149_gmail_com/.bashrc
-bash -l /home/newsletters_box149_gmail_com/wordcount/scale-subject/start.sh  
+source .bashrc
+cd wordcount/scale-subject
+./start.sh  
 ```
 
 
